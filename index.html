@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MBUILDS — CV Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400;500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0b;
+  --surface:#111113;
+  --surface2:#18181b;
+  --surface3:#1f1f23;
+  --border:#2a2a30;
+  --border2:#353540;
+  --text:#f0f0f2;
+  --text2:#9090a0;
+  --text3:#55555f;
+  --gold:#e8d5a3;
+  --gold2:#c4a87a;
+  --gold-dim:rgba(232,213,163,0.08);
+  --blue:#5865f2;
+  --blue-dim:rgba(88,101,242,0.08);
+  --red:#ff4d4d;
+  --r:12px;--rl:20px;
+}
+html{font-size:14px}
+body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.5;}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:100;background:rgba(10,10,11,.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);height:60px;}
+.hi{max-width:1640px;margin:0 auto;padding:0 24px;height:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none;}
+.logo-mark{width:32px;height:32px;background:var(--gold);border-radius:7px;display:flex;align-items:center;justify-content:center;color:var(--bg);flex-shrink:0;}
+.logo-text{font-family:'Bebas Neue',sans-serif;font-size:1.45rem;letter-spacing:.14em;color:var(--text);line-height:1;}
+.logo-text em{color:var(--gold);font-style:normal;}
+.lang-pill{display:flex;gap:2px;background:var(--surface2);border:1px solid var(--border);border-radius:9999px;padding:3px;}
+.lb{padding:4px 12px;border-radius:9999px;border:none;cursor:pointer;font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;background:transparent;color:var(--text3);transition:all .2s;}
+.lb.on{background:var(--gold);color:var(--bg);}
+.lb:hover:not(.on){color:var(--text2);}
+.hr{display:flex;align-items:center;gap:8px;}
+.bg{display:flex;align-items:center;gap:6px;padding:7px 16px;border-radius:9999px;background:transparent;border:1px solid var(--border2);color:var(--text2);font-family:'Geist',sans-serif;font-size:12px;cursor:pointer;transition:all .2s;}
+.bg:hover{border-color:var(--gold);color:var(--gold);}
+.bs{display:flex;align-items:center;gap:6px;padding:7px 18px;border-radius:9999px;background:var(--gold);border:none;color:var(--bg);font-family:'Geist',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;}
+.bs:hover{background:var(--gold2);}
+.bs:active,.bg:active{transform:scale(.97);}
+.cl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);background:none;border:none;cursor:pointer;transition:color .2s;}
+.cl:hover{color:var(--gold);}
+.hd{width:1px;height:18px;background:var(--border);}
+
+/* MODAL */
+#modal{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.72);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
+#modal.open{opacity:1;pointer-events:all;}
+.mc{background:var(--surface);border:1px solid var(--border2);border-radius:24px;width:100%;max-width:500px;padding:44px;transform:translateY(18px) scale(.97);transition:transform .3s;position:relative;}
+#modal.open .mc{transform:none;}
+.mx{position:absolute;top:18px;right:18px;width:30px;height:30px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);color:var(--text3);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.mx:hover{color:var(--text);border-color:var(--border2);}
+.mh{display:flex;align-items:center;gap:18px;margin-bottom:36px;}
+.ma{width:66px;height:66px;border-radius:14px;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.1em;color:var(--bg);flex-shrink:0;}
+.mn{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:.05em;color:var(--text);line-height:1;margin-bottom:3px;}
+.mr{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);}
+.ml{display:flex;flex-direction:column;gap:10px;}
+.mla{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:12px;background:var(--surface2);border:1px solid var(--border);text-decoration:none;color:var(--text);transition:all .2s;}
+.mla:hover{border-color:var(--gold);background:var(--gold-dim);}
+.mli{color:var(--gold);flex-shrink:0;}
+.mll{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--text3);margin-bottom:2px;}
+.mlv{font-size:12px;font-weight:500;}
+.mf{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:20px;border-top:1px solid var(--border);}
+.mcp{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;color:var(--text3);}
+.mds{display:flex;gap:5px;}
+.md{width:5px;height:5px;border-radius:50%;}
+
+/* MAIN */
+main{max-width:1640px;margin:0 auto;padding:24px;display:grid;grid-template-columns:400px 1fr;gap:24px;align-items:start;position:relative;z-index:1;}
+
+/* EDITOR */
+.ed{display:flex;flex-direction:column;gap:14px;position:sticky;top:76px;max-height:calc(100vh - 92px);overflow-y:auto;padding-bottom:48px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.ed::-webkit-scrollbar{width:3px;}
+.ed::-webkit-scrollbar-thumb{background:var(--border);}
+
+/* CARD */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;}
+.cp{padding:18px;}
+.sl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.sl::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* TEMPLATES */
+.tg{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
+.tb{padding:12px 8px;border-radius:9px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:8px;}
+.tb:hover{border-color:var(--border2);}
+.tb.on{border-color:var(--gold);background:var(--gold-dim);}
+.tt{width:44px;height:54px;border-radius:4px;background:var(--surface3);border:1px solid var(--border);overflow:hidden;position:relative;}
+.tl{height:1.5px;background:var(--border2);margin:4px 5px 2.5px;}
+.tl.a{background:var(--gold);opacity:.7;}
+.tsd{position:absolute;left:0;top:0;bottom:0;width:12px;background:var(--surface3);border-right:1px solid var(--border2);}
+.tn{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);}
+.tb.on .tn{color:var(--gold);}
+
+/* TABS */
+.tabs{display:flex;gap:2px;background:var(--surface2);border-bottom:1px solid var(--border);padding:7px 7px 0;}
+.tab{flex:1;padding:8px 4px 9px;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text3);border-radius:7px 7px 0 0;transition:all .2s;position:relative;}
+.tab::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:transparent;transition:.2s;}
+.tab.on{color:var(--gold);background:var(--surface);}
+.tab.on::after{background:var(--gold);}
+.tab:hover:not(.on){color:var(--text2);}
+.tl2{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;}
+.tb2{padding:18px;display:none;}
+.tb2.on{display:block;}
+
+/* INPUTS */
+.f{margin-bottom:11px;}
+.lb2{display:block;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--text3);margin-bottom:5px;}
+.inp,.txa,.sel{width:100%;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-family:'Geist',sans-serif;font-size:12.5px;transition:border-color .2s,box-shadow .2s;}
+.inp::placeholder,.txa::placeholder{color:var(--text3);}
+.inp:focus,.txa:focus,.sel:focus{outline:none;border-color:var(--gold2);box-shadow:0 0 0 3px rgba(196,168,122,.1);}
+.txa{resize:none;line-height:1.6;}
+.sel{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23555' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.pr{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.pb{width:68px;height:68px;flex-shrink:0;border-radius:11px;border:1px dashed var(--border2);background:var(--surface2);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;cursor:pointer;transition:border-color .2s;}
+.pb:hover{border-color:var(--gold);}
+.pb img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+.pb input{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.sr{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.ps{font-family:'DM Mono',monospace;font-size:9.5px;background:var(--gold-dim);color:var(--gold);border:1px solid rgba(232,213,163,.18);border-radius:5px;padding:3px 7px;cursor:pointer;outline:none;max-width:160px;}
+
+/* ENTRY CARD */
+.ec{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:13px;margin-bottom:9px;position:relative;}
+.erm{position:absolute;top:10px;right:10px;background:none;border:none;color:var(--text3);cursor:pointer;transition:color .2s;padding:2px;}
+.erm:hover{color:var(--red);}
+.ei{width:100%;background:transparent;border:none;border-bottom:1px solid var(--border);padding:4px 0;color:var(--text);font-family:'Geist',sans-serif;font-size:12.5px;font-weight:600;margin-bottom:7px;transition:border-color .2s;}
+.ei::placeholder{color:var(--text3);}
+.ei:focus{outline:none;border-color:var(--gold2);}
+.es{width:100%;background:transparent;border:none;border-bottom:1px solid var(--border);padding:4px 0;color:var(--text2);font-family:'Geist',sans-serif;font-size:12px;margin-bottom:7px;transition:border-color .2s;}
+.es::placeholder{color:var(--text3);}
+.es:focus{outline:none;border-color:var(--gold2);}
+.et{width:100%;background:transparent;border:1px solid var(--border);border-radius:5px;padding:7px;color:var(--text2);font-family:'Geist',sans-serif;font-size:12px;resize:none;margin-top:5px;transition:border-color .2s;line-height:1.5;}
+.et::placeholder{color:var(--text3);}
+.et:focus{outline:none;border-color:var(--gold2);}
+.ab{width:100%;padding:10px;border:1px dashed var(--border2);border-radius:9px;background:transparent;color:var(--text3);font-family:'Geist',sans-serif;font-size:12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:5px;}
+.ab:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
+.asml{background:none;border:none;color:var(--gold);font-family:'Geist',sans-serif;font-size:11.5px;cursor:pointer;display:flex;align-items:center;gap:5px;padding:3px 0;transition:opacity .2s;}
+.asml:hover{opacity:.7;}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px;}
+.tag{padding:3px 9px;border-radius:9999px;font-size:11px;font-weight:500;display:flex;align-items:center;gap:4px;}
+.ts{background:rgba(232,213,163,.1);color:var(--gold);border:1px solid rgba(232,213,163,.18);}
+.tc{background:rgba(139,92,246,.1);color:#a78bfa;border:1px solid rgba(139,92,246,.18);}
+.tx{background:none;border:none;cursor:pointer;color:inherit;opacity:.5;font-size:9px;padding:0;}
+.tx:hover{opacity:1;}
+.lr{display:flex;align-items:center;gap:7px;margin-bottom:7px;}
+.li{flex:1;padding:6px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-family:'Geist',sans-serif;font-size:12px;}
+.li:focus{outline:none;border-color:var(--gold2);}
+.lse{padding:6px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-family:'Geist',sans-serif;font-size:12px;cursor:pointer;}
+.lse:focus{outline:none;}
+.lrm{background:none;border:none;color:var(--text3);cursor:pointer;padding:3px;transition:color .2s;}
+.lrm:hover{color:var(--red);}
+
+/* PREVIEW */
+.pv{position:sticky;top:76px;}
+.pvb{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding:0 2px;}
+.pvl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);display:flex;align-items:center;gap:7px;}
+.ld{width:5px;height:5px;border-radius:50%;background:#22c55e;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+.pvc{display:flex;gap:5px;}
+.pd{width:10px;height:10px;border-radius:50%;cursor:pointer;transition:transform .2s;}
+.pd:hover{transform:scale(1.3);}
+.pvs{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;max-height:calc(100vh - 128px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.pvs::-webkit-scrollbar{width:3px;}
+.pvs::-webkit-scrollbar-thumb{background:var(--border);}
+#cv-out{background:#fff;border-radius:7px;min-height:860px;overflow:hidden;box-shadow:0 0 0 1px rgba(0,0,0,.06),0 20px 60px -12px rgba(0,0,0,.5);}
+
+/* ═══ CV STYLES ═══ */
+
+/* ATS */
+.cv-ats{font-family:'Geist',sans-serif;padding:44px;color:#18181f;}
+.ah{border-bottom:2.5px solid #12121a;padding-bottom:18px;margin-bottom:24px;text-align:center;}
+.an{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:.12em;color:#0c0c14;line-height:1;margin-bottom:4px;}
+.at{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;color:#5865f2;margin-bottom:14px;}
+.acs{display:flex;flex-wrap:wrap;justify-content:center;gap:5px 22px;}
+.act{display:flex;align-items:center;gap:5px;font-size:10.5px;color:#5a5a68;font-family:'DM Mono',monospace;letter-spacing:.04em;}
+.as2{margin-bottom:20px;}
+.ash{font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:.16em;color:#0c0c14;border-bottom:1.5px solid #ebebf2;padding-bottom:4px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
+.aac{height:3px;width:36px;background:#5865f2;border-radius:2px;}
+.abdy{font-size:11.5px;line-height:1.7;color:#3a3a48;white-space:pre-line;}
+.aerow{margin-bottom:16px;}
+.ae1{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px;}
+.aepos{font-family:'Geist',sans-serif;font-weight:700;color:#0c0c14;font-size:.82rem;text-transform:uppercase;letter-spacing:.03em;}
+.aedts{font-family:'DM Mono',monospace;font-size:9.5px;color:#888;letter-spacing:.04em;}
+.aeco{font-size:10.5px;font-style:italic;color:#666;}
+.aedsc{font-size:11px;color:#444;line-height:1.65;white-space:pre-line;margin-top:4px;}
+.a2c{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+.aedui{margin-bottom:12px;}
+.aedg{font-weight:700;font-size:.75rem;color:#0c0c14;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px;}
+.aesc{font-size:10.5px;color:#5865f2;font-weight:600;margin-bottom:1px;}
+.aedt{font-family:'DM Mono',monospace;font-size:9.5px;color:#888;}
+.asts{display:flex;flex-wrap:wrap;gap:4px;}
+.ast{padding:3px 8px;background:#f0f0f6;border-radius:3px;font-size:9.5px;font-weight:600;color:#333;text-transform:uppercase;letter-spacing:.04em;}
+.alr{display:flex;justify-content:space-between;margin-bottom:5px;padding-right:6px;border-right:2px solid #ebebf2;}
+.aln{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:#333;}
+.all{font-family:'DM Mono',monospace;font-size:9.5px;color:#5865f2;}
+.acl{display:flex;flex-wrap:wrap;gap:7px 24px;}
+.aci{display:flex;align-items:center;gap:7px;font-size:10.5px;color:#444;font-weight:500;}
+.avr{margin-bottom:12px;}
+.avrr{font-weight:700;font-size:.75rem;color:#0c0c14;text-transform:uppercase;letter-spacing:.04em;margin-bottom:1px;}
+.avro{font-size:10.5px;color:#5865f2;font-weight:600;margin-bottom:1px;}
+.avrd{font-family:'DM Mono',monospace;font-size:9.5px;color:#888;}
+
+/* ALGERIAN */
+.cv-alg{font-family:'Geist',sans-serif;display:grid;grid-template-columns:228px 1fr;min-height:860px;}
+.algb{background:#0c0c10;padding:32px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;}
+.algb::after{content:'';position:absolute;top:0;right:0;width:1px;height:100%;background:linear-gradient(to bottom,transparent,#5865f2 25%,#5865f2 75%,transparent);opacity:.4;}
+.algph{width:100px;height:100px;border-radius:50%;object-fit:cover;border:2px solid #1e1e2a;margin-bottom:14px;}
+.algnph{width:100px;height:100px;border-radius:50%;background:#161620;border:2px solid #232330;display:flex;align-items:center;justify-content:center;color:#2a2a38;margin-bottom:14px;}
+.algn{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.08em;color:#eeeef5;line-height:1.05;margin-bottom:7px;}
+.algrl{width:28px;height:1px;background:#5865f2;margin:0 auto 9px;}
+.algrole{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:#5865f2;background:rgba(88,101,242,.1);border:1px solid rgba(88,101,242,.18);padding:3px 10px;border-radius:9999px;display:inline-block;}
+.algsc{width:100%;text-align:left;margin-top:24px;}
+.algssl{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:#363645;margin-bottom:10px;}
+.algct{display:flex;align-items:center;gap:9px;font-size:10.5px;color:#5a5a72;margin-bottom:7px;word-break:break-all;}
+.algll{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+.alglln{font-size:11.5px;font-weight:600;color:#a0a0b8;}
+.algllv{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.1em;color:#5865f2;background:rgba(88,101,242,.1);padding:2px 5px;border-radius:3px;text-transform:uppercase;}
+.algs{display:inline-block;padding:2px 8px;background:#161620;border:1px solid #222230;color:#4a4a5a;border-radius:4px;font-size:9.5px;margin:2px;}
+.algci{display:flex;gap:5px;align-items:flex-start;font-size:9.5px;color:#505060;font-style:italic;margin-bottom:5px;}
+.algm{background:#fff;padding:36px 32px;font-family:'Geist',sans-serif;}
+.algmsh{font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:.22em;color:#5865f2;margin-bottom:18px;display:flex;align-items:center;gap:14px;}
+.algmsh::after{content:'';flex:1;height:1px;background:#eff0fa;}
+.algsum{font-family:'Instrument Serif',serif;font-size:.9rem;font-style:italic;color:#555;line-height:1.75;border-left:3px solid #eef0ff;padding-left:12px;white-space:pre-line;}
+.algei{position:relative;padding-left:18px;border-left:1px solid #eee;margin-bottom:22px;}
+.algedot{position:absolute;left:-4.5px;top:3px;width:8px;height:8px;border-radius:50%;background:#eef0ff;border:1.5px solid #5865f2;}
+.algeh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;flex-wrap:wrap;gap:5px;}
+.algep{font-size:.9rem;font-weight:700;color:#0c0c14;}
+.alged{font-family:'DM Mono',monospace;font-size:9px;color:#5865f2;background:#eef0ff;padding:2px 9px;border-radius:9999px;letter-spacing:.06em;}
+.algesub{display:flex;align-items:center;gap:5px;margin-bottom:7px;}
+.algeco{font-family:'DM Mono',monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:.08em;color:#999;}
+.algeloc{font-size:10px;font-style:italic;color:#aaa;}
+.algedesc{font-size:11px;color:#555;line-height:1.65;white-space:pre-line;}
+.alg2{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+.algedi{margin-bottom:12px;}
+.algedeg{font-size:.8rem;font-weight:700;color:#0c0c14;margin-bottom:2px;}
+.algesc2{font-size:10.5px;color:#666;font-weight:500;margin-bottom:3px;}
+.algedt{font-family:'DM Mono',monospace;font-size:9px;color:#999;background:#f8f8fc;padding:1px 6px;border-radius:3px;display:inline-block;}
+
+/* EUROPEAN */
+.cv-eur{font-family:'Geist',sans-serif;padding:44px;background:#fff;}
+.eurhd{display:flex;justify-content:space-between;align-items:flex-end;gap:28px;border-bottom:4px solid #0c0c14;padding-bottom:28px;margin-bottom:36px;}
+.eurn{font-family:'Bebas Neue',sans-serif;font-size:4.2rem;letter-spacing:.08em;line-height:.88;color:#0c0c14;margin-bottom:14px;}
+.eurn em{color:#5865f2;font-style:normal;}
+.eurjt{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;color:#888;border-left:3px solid #5865f2;padding-left:10px;margin-bottom:16px;}
+.eurcs{display:flex;flex-wrap:wrap;gap:5px;}
+.eurcp{display:flex;align-items:center;gap:5px;font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:.05em;color:#555;background:#f4f4f8;padding:4px 10px;border-radius:9999px;}
+.eurph{flex-shrink:0;position:relative;}
+.eurph::before{content:'';position:absolute;inset:-6px;background:#5865f2;border-radius:10px;transform:rotate(4deg);z-index:0;}
+.eurph img{width:148px;height:148px;border-radius:7px;object-fit:cover;display:block;position:relative;z-index:1;box-shadow:0 16px 40px -8px rgba(0,0,0,.22);}
+.eurbd{display:grid;grid-template-columns:150px 1fr;gap:36px 44px;}
+.eurlw{padding-top:3px;}
+.eursl{font-family:'Bebas Neue',sans-serif;font-size:.88rem;letter-spacing:.16em;color:#0c0c14;margin-bottom:4px;}
+.euracc{height:2.5px;width:24px;background:#5865f2;border-radius:2px;}
+.eursum{font-family:'Instrument Serif',serif;font-size:.95rem;font-style:italic;color:#444;line-height:1.8;white-space:pre-line;}
+.eurei{margin-bottom:28px;}
+.eureh{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:7px;flex-wrap:wrap;}
+.eurep{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.06em;color:#0c0c14;}
+.eured{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.05em;color:#888;border:1px solid #e0e0ea;padding:2.5px 9px;border-radius:9999px;}
+.eureco{font-family:'Bebas Neue',sans-serif;font-size:.8rem;letter-spacing:.08em;color:#5865f2;margin-bottom:7px;}
+.eureco span{color:#ccc;font-family:'Geist',sans-serif;font-size:.72rem;font-weight:400;margin:0 5px;letter-spacing:0;}
+.euredsc{font-size:11.5px;color:#555;line-height:1.8;white-space:pre-line;border-left:2px solid #f0f0f5;padding-left:14px;}
+.eureg{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.eurec{background:#f7f7fc;padding:16px;border-radius:8px;}
+.euredeg{font-weight:700;font-size:.77rem;color:#0c0c14;margin-bottom:3px;}
+.euresc{font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:#888;margin-bottom:7px;}
+.euredt{font-family:'DM Mono',monospace;font-size:9px;color:#5865f2;letter-spacing:.05em;}
+.eurlcds{display:flex;flex-wrap:wrap;gap:8px;}
+.eurlcd{padding:12px 16px;background:#f7f7fc;border-radius:8px;min-width:110px;}
+.eurlcn{font-weight:700;font-size:.82rem;color:#0c0c14;margin-bottom:4px;}
+.eurlcl{font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:#5865f2;background:#eef0ff;padding:1.5px 6px;border-radius:4px;display:inline-block;}
+.eursts{display:flex;flex-wrap:wrap;gap:7px;}
+.eurst{padding:7px 16px;background:#0c0c14;color:#fff;border-radius:7px;font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.05em;text-transform:uppercase;}
+.eurcl{display:flex;flex-wrap:wrap;gap:14px;}
+.eurci{display:flex;align-items:center;gap:9px;}
+.eurcic{width:26px;height:26px;border-radius:50%;background:#eef0ff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.eurct{font-size:11.5px;color:#444;font-weight:500;}
+.eurvitem{margin-bottom:18px;}
+.eurvr{font-weight:700;font-size:.82rem;color:#0c0c14;margin-bottom:2px;}
+.eurvo{font-size:10.5px;color:#888;margin-bottom:7px;}
+.eurvbar{height:1.5px;background:#eee;border-radius:2px;overflow:hidden;margin-bottom:3px;}
+.eurvfill{height:100%;width:33%;background:#5865f2;}
+.eurvd{font-family:'DM Mono',monospace;font-size:9px;color:#aaa;letter-spacing:.04em;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hi">
+    <a class="logo" href="#" onclick="openModal(false);return false;">
+      <div class="logo-mark">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <span class="logo-text">M<em>BUILDS</em></span>
+    </a>
+    <div class="lang-pill" id="lp">
+      <button class="lb on" data-l="en" onclick="setLang('en')">EN</button>
+      <button class="lb" data-l="fr" onclick="setLang('fr')">FR</button>
+      <button class="lb" data-l="ar" onclick="setLang('ar')">ع</button>
+      <button class="lb" data-l="bilingual" onclick="setLang('bilingual')">AR/EN</button>
+    </div>
+    <div class="hr">
+      <button class="cl" onclick="openModal(true)">The Creator</button>
+      <div class="hd"></div>
+      <button class="bg" onclick="exportDocx()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span id="ldocx">Word</span>
+      </button>
+      <button class="bs" onclick="exportPDF()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span id="lpdf">Export PDF</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="modal" onclick="if(event.target===this)openModal(false)">
+  <div class="mc">
+    <button class="mx" onclick="openModal(false)">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="mh">
+      <div class="ma">MB</div>
+      <div><div class="mn">Moussa Belli</div><div class="mr">Architect of MBuilds</div></div>
+    </div>
+    <div class="ml">
+      <a href="mailto:moussa.belli@univ-jijel.dz" class="mla">
+        <svg class="mli" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <div><div class="mll">Email</div><div class="mlv">moussa.belli@univ-jijel.dz</div></div>
+      </a>
+      <a href="#" target="_blank" class="mla">
+        <svg class="mli" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        <div><div class="mll">LinkedIn</div><div class="mlv">Moussa Belli</div></div>
+      </a>
+    </div>
+    <div class="mf">
+      <span class="mcp">© 2026 MBUILDS</span>
+      <div class="mds"><div class="md" style="background:#2a2a4a"></div><div class="md" style="background:#5865f2;opacity:.6"></div><div class="md" style="background:#e8d5a3"></div></div>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="ed">
+    <div class="card"><div class="cp">
+      <div class="sl">Format</div>
+      <div class="tg" id="tg">
+        <button class="tb on" data-t="ats" onclick="setTpl('ats')">
+          <div class="tt"><div class="tl a" style="width:68%;margin-top:7px"></div><div class="tl" style="width:88%"></div><div class="tl" style="width:75%"></div><div class="tl" style="width:92%"></div><div class="tl" style="width:62%"></div><div class="tl" style="width:80%"></div></div>
+          <div class="tn">ATS</div>
+        </button>
+        <button class="tb" data-t="algerian" onclick="setTpl('algerian')">
+          <div class="tt" style="display:grid;grid-template-columns:12px 1fr;padding:0"><div class="tsd"></div><div style="padding:5px 4px"><div class="tl a" style="width:80%"></div><div class="tl" style="width:90%"></div><div class="tl" style="width:70%"></div><div class="tl" style="width:85%"></div><div class="tl" style="width:60%"></div></div></div>
+          <div class="tn">Algerian</div>
+        </button>
+        <button class="tb" data-t="european" onclick="setTpl('european')">
+          <div class="tt"><div class="tl a" style="width:100%;margin:0 0 3px;height:2.5px"></div><div style="display:grid;grid-template-columns:26px 1fr;gap:3px;padding:3px 5px"><div><div class="tl a" style="width:100%;height:1.5px"></div><div class="tl" style="height:1.5px"></div></div><div><div class="tl" style="width:90%"></div><div class="tl" style="width:75%"></div><div class="tl" style="width:85%"></div></div></div></div>
+          <div class="tn">European</div>
+        </button>
+      </div>
+    </div></div>
+
+    <div class="card">
+      <div class="tabs" id="tabs">
+        <button class="tab on" data-tab="info" onclick="setTab('info')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span class="tl2" id="tl-info">Info</span>
+        </button>
+        <button class="tab" data-tab="exp" onclick="setTab('exp')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          <span class="tl2" id="tl-exp">Work</span>
+        </button>
+        <button class="tab" data-tab="edu" onclick="setTab('edu')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          <span class="tl2" id="tl-edu">Edu</span>
+        </button>
+        <button class="tab" data-tab="skills" onclick="setTab('skills')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <span class="tl2" id="tl-skills">Skills</span>
+        </button>
+        <button class="tab" data-tab="more" onclick="setTab('more')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+          <span class="tl2" id="tl-more">More</span>
+        </button>
+      </div>
+
+      <div class="tb2 on" id="tb2-info">
+        <div class="pr">
+          <div class="pb" onclick="document.getElementById('pinp').click()">
+            <svg id="pico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3a3a48" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <img id="pimg" style="display:none"/>
+            <input type="file" id="pinp" accept="image/*" style="display:none" onchange="upPhoto(event)"/>
+          </div>
+          <div style="flex:1"><div class="f"><label class="lb2" id="l-nm">Full Name</label><input class="inp" id="i-nm" placeholder="Jane Doe" oninput="render()"/></div></div>
+        </div>
+        <div class="f"><label class="lb2" id="l-tt">Job Title</label><input class="inp" id="i-tt" placeholder="Product Designer" oninput="render()"/></div>
+        <div class="g2"><div class="f"><label class="lb2" id="l-em">Email</label><input class="inp" id="i-em" oninput="render()"/></div><div class="f"><label class="lb2" id="l-ph">Phone</label><input class="inp" id="i-ph" oninput="render()"/></div></div>
+        <div class="f"><label class="lb2" id="l-ad">Address</label><input class="inp" id="i-ad" oninput="render()"/></div>
+        <div class="f">
+          <div class="sr"><label class="lb2" id="l-sm" style="margin:0">Summary</label><select class="ps" id="prd" onchange="usePre(this)"><option value="">Suggestions</option></select></div>
+          <textarea class="txa" id="i-sm" rows="4" oninput="render()" style="margin-top:5px"></textarea>
+        </div>
+      </div>
+
+      <div class="tb2" id="tb2-exp">
+        <div id="exp-lst"></div>
+        <button class="ab" id="btn-aexp" onclick="addExp()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Experience
+        </button>
+      </div>
+
+      <div class="tb2" id="tb2-edu">
+        <div id="edu-lst"></div>
+        <button class="ab" id="btn-aedu" onclick="addEdu()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Education
+        </button>
+      </div>
+
+      <div class="tb2" id="tb2-skills">
+        <div class="f"><label class="lb2" id="l-sk">Skills</label><div class="tags" id="sktags"></div><input class="inp" id="i-sk" placeholder="Type & press Enter…" onkeydown="addTag(event,'s')"/></div>
+        <div class="f" style="margin-top:18px;padding-top:18px;border-top:1px solid var(--border)"><label class="lb2" id="l-ct">Certifications</label><div class="tags" id="cttags"></div><input class="inp" id="i-ct" placeholder="Type & press Enter…" onkeydown="addTag(event,'c')"/></div>
+      </div>
+
+      <div class="tb2" id="tb2-more">
+        <div class="f"><label class="lb2" id="l-lg">Languages</label><div id="lang-lst"></div><button class="asml" id="btn-alng" onclick="addLang()" style="margin-top:5px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add Language</button></div>
+        <div class="f" style="margin-top:18px;padding-top:18px;border-top:1px solid var(--border)"><label class="lb2" id="l-vl">Volunteering</label><div id="vol-lst"></div><button class="ab" id="btn-avol" onclick="addVol()" style="margin-top:7px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pv">
+    <div class="pvb">
+      <div class="pvl"><div class="ld"></div>Live Preview</div>
+      <div class="pvc">
+        <div class="pd" style="background:#ff5f56;box-shadow:0 0 7px rgba(255,95,86,.5)"></div>
+        <div class="pd" style="background:#ffbd2e;box-shadow:0 0 7px rgba(255,189,46,.4)"></div>
+        <div class="pd" style="background:#27c93f;box-shadow:0 0 7px rgba(39,201,63,.4)"></div>
+      </div>
+    </div>
+    <div class="pvs"><div id="cv-out"></div></div>
+  </div>
+</main>
+
+<script>
+const S={lang:'en',tpl:'ats',nm:'',tt:'',em:'',ph:'',ad:'',sm:'',photo:'',exp:[],edu:[],sk:[],ct:[],lg:[],vl:[]};
+const T={
+  en:{nm:'Full Name',tt:'Job Title',em:'Email',ph:'Phone',ad:'Address',sm:'Summary',exp:'Work Experience',edu:'Education',sk:'Skills',ct:'Certifications',lg:'Languages',vl:'Volunteering',org:'Organization',role:'Role',co:'Company',pos:'Position',loc:'Location',sd:'Start Date',ed:'End Date',dsc:'Description',sch:'School / University',deg:'Degree',basic:'Basic',intermediate:'Intermediate',fluent:'Fluent',native:'Native',pdf:'Export PDF',word:'Word',prd:'Suggestions'},
+  fr:{nm:'Nom Complet',tt:'Poste',em:'Email',ph:'Téléphone',ad:'Adresse',sm:'Résumé',exp:'Expérience',edu:'Formation',sk:'Compétences',ct:'Certifications',lg:'Langues',vl:'Bénévolat',org:'Organisation',role:'Rôle',co:'Entreprise',pos:'Poste',loc:'Lieu',sd:'Début',ed:'Fin',dsc:'Description',sch:'École',deg:'Diplôme',basic:'Débutant',intermediate:'Intermédiaire',fluent:'Courant',native:'Maternel',pdf:'PDF',word:'Word',prd:'Suggestions'},
+  ar:{nm:'الاسم',tt:'المسمى',em:'البريد',ph:'الهاتف',ad:'العنوان',sm:'ملخص',exp:'الخبرة',edu:'التعليم',sk:'المهارات',ct:'الشهادات',lg:'اللغات',vl:'التطوع',org:'المنظمة',role:'الدور',co:'الشركة',pos:'المنصب',loc:'الموقع',sd:'البداية',ed:'النهاية',dsc:'الوصف',sch:'المدرسة',deg:'الشهادة',basic:'مبتدئ',intermediate:'متوسط',fluent:'متقدم',native:'اللغة الأم',pdf:'PDF',word:'Word',prd:'اقتراحات'}
+};
+const PREDS={en:['Highly motivated professional with 5+ years in project management.','Results-driven engineer seeking challenging software development roles.','Detail-oriented professional with a proven track record of efficiency.'],fr:["Professionnel motivé avec 5+ ans d'expérience en gestion de projet.","Ingénieur orienté résultats cherchant des rôles stimulants.","Professionnel rigoureux avec un historique prouvé d'efficacité."],ar:['محترف متحفز مع أكثر من 5 سنوات في إدارة المشاريع.','مهندس يسعى لتحديات في تطوير البرمجيات.','محترف دقيق مع سجل حافل من الكفاءة.']};
+const t=()=>T[S.lang==='bilingual'?'en':S.lang]||T.en;
+
+function openModal(v){document.getElementById('modal').classList.toggle('open',v);}
+function setLang(l){S.lang=l;document.querySelectorAll('.lb').forEach(b=>b.classList.toggle('on',b.dataset.l===l));document.body.dir=(l==='ar'||l==='bilingual')?'rtl':'ltr';refreshUI();refreshPreds();render();}
+function refreshUI(){const u=t(),s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};s('l-nm',u.nm);s('l-tt',u.tt);s('l-em',u.em);s('l-ph',u.ph);s('l-ad',u.ad);s('l-sm',u.sm);s('l-sk',u.sk);s('l-ct',u.ct);s('l-lg',u.lg);s('l-vl',u.vl);s('lpdf',u.pdf);s('ldocx',u.word);}
+function refreshPreds(){const lang=S.lang==='bilingual'?'en':S.lang;const ps=PREDS[lang]||PREDS.en;const sel=document.getElementById('prd');sel.innerHTML=`<option value="">${t().prd}</option>`;ps.forEach(p=>{const o=document.createElement('option');o.value=p;o.textContent=p.slice(0,35)+'…';sel.appendChild(o);});}
+function usePre(sel){if(sel.value){document.getElementById('i-sm').value=sel.value;render();sel.value='';}}
+function setTpl(v){S.tpl=v;document.querySelectorAll('.tb').forEach(b=>b.classList.toggle('on',b.dataset.t===v));render();}
+function setTab(v){document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.tab===v));document.querySelectorAll('.tb2').forEach(b=>b.classList.toggle('on',b.id==='tb2-'+v));}
+function upPhoto(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onloadend=()=>{S.photo=r.result;document.getElementById('pico').style.display='none';const img=document.getElementById('pimg');img.src=r.result;img.style.display='block';render();};r.readAsDataURL(f);}
+function sync(){['nm','tt','em','ph','ad','sm'].forEach(k=>{const e=document.getElementById('i-'+k);if(e)S[k]=e.value;});}
+
+function addExp(){S.exp.push({co:'',pos:'',loc:'',sd:'',ed:'',dsc:''});renderExp();render();}
+function rmExp(i){S.exp.splice(i,1);renderExp();render();}
+function upExp(i,k,v){S.exp[i][k]=v;render();}
+function renderExp(){const u=t(),c=document.getElementById('exp-lst');c.innerHTML='';S.exp.forEach((e,i)=>{const d=document.createElement('div');d.className='ec';d.innerHTML=`<button class="erm" onclick="rmExp(${i})">${tr()}</button><input class="ei" placeholder="${u.co}" value="${x(e.co)}" oninput="upExp(${i},'co',this.value)"/><input class="es" placeholder="${u.pos}" value="${x(e.pos)}" oninput="upExp(${i},'pos',this.value)"/><div class="g2" style="margin-top:4px"><input class="es" placeholder="${u.sd}" value="${x(e.sd)}" oninput="upExp(${i},'sd',this.value)"/><input class="es" placeholder="${u.ed}" value="${x(e.ed)}" oninput="upExp(${i},'ed',this.value)"/></div><textarea class="et" rows="3" placeholder="${u.dsc}" oninput="upExp(${i},'dsc',this.value)">${x(e.dsc)}</textarea>`;c.appendChild(d);});}
+
+function addEdu(){S.edu.push({sch:'',deg:'',sd:'',ed:''});renderEdu();render();}
+function rmEdu(i){S.edu.splice(i,1);renderEdu();render();}
+function upEdu(i,k,v){S.edu[i][k]=v;render();}
+function renderEdu(){const u=t(),c=document.getElementById('edu-lst');c.innerHTML='';S.edu.forEach((e,i)=>{const d=document.createElement('div');d.className='ec';d.innerHTML=`<button class="erm" onclick="rmEdu(${i})">${tr()}</button><input class="ei" placeholder="${u.sch}" value="${x(e.sch)}" oninput="upEdu(${i},'sch',this.value)"/><input class="es" placeholder="${u.deg}" value="${x(e.deg)}" oninput="upEdu(${i},'deg',this.value)"/><div class="g2" style="margin-top:4px"><input class="es" placeholder="${u.sd}" value="${x(e.sd)}" oninput="upEdu(${i},'sd',this.value)"/><input class="es" placeholder="${u.ed}" value="${x(e.ed)}" oninput="upEdu(${i},'ed',this.value)"/></div>`;c.appendChild(d);});}
+
+function addTag(e,tp){if(e.key!=='Enter')return;const v=e.target.value.trim();if(!v)return;if(tp==='s'&&!S.sk.includes(v))S.sk.push(v);if(tp==='c'&&!S.ct.includes(v))S.ct.push(v);e.target.value='';renderTags();render();}
+function rmTag(v,tp){if(tp==='s')S.sk=S.sk.filter(s=>s!==v);if(tp==='c')S.ct=S.ct.filter(s=>s!==v);renderTags();render();}
+function renderTags(){const sk=document.getElementById('sktags'),ct=document.getElementById('cttags');sk.innerHTML='';ct.innerHTML='';S.sk.forEach(s=>{const p=document.createElement('span');p.className='tag ts';p.innerHTML=`${x(s)}<button class="tx" onclick="rmTag('${x(s).replace(/'/g,"\\'")}','s')">✕</button>`;sk.appendChild(p);});S.ct.forEach(c=>{const p=document.createElement('span');p.className='tag tc';p.innerHTML=`${x(c)}<button class="tx" onclick="rmTag('${x(c).replace(/'/g,"\\'")}','c')">✕</button>`;ct.appendChild(p);});}
+
+function addLang(){S.lg.push({nm:'',lv:'Basic'});renderLangs();render();}
+function rmLang(i){S.lg.splice(i,1);renderLangs();render();}
+function upLang(i,k,v){S.lg[i][k]=v;render();}
+function renderLangs(){const u=t(),c=document.getElementById('lang-lst');c.innerHTML='';S.lg.forEach((l,i)=>{const d=document.createElement('div');d.className='lr';d.innerHTML=`<input class="li" placeholder="Language" value="${x(l.nm)}" oninput="upLang(${i},'nm',this.value)"/><select class="lse" onchange="upLang(${i},'lv',this.value)">${['Basic','Intermediate','Fluent','Native'].map(lv=>`<option value="${lv}" ${l.lv===lv?'selected':''}>${u[lv.toLowerCase()]}</option>`).join('')}</select><button class="lrm" onclick="rmLang(${i})">${tr()}</button>`;c.appendChild(d);});}
+
+function addVol(){S.vl.push({org:'',role:'',sd:'',ed:''});renderVol();render();}
+function rmVol(i){S.vl.splice(i,1);renderVol();render();}
+function upVol(i,k,v){S.vl[i][k]=v;render();}
+function renderVol(){const u=t(),c=document.getElementById('vol-lst');c.innerHTML='';S.vl.forEach((v,i)=>{const d=document.createElement('div');d.className='ec';d.style.marginBottom='9px';d.innerHTML=`<button class="erm" onclick="rmVol(${i})">${tr()}</button><input class="ei" placeholder="${u.org}" value="${x(v.org)}" oninput="upVol(${i},'org',this.value)"/><input class="es" placeholder="${u.role}" value="${x(v.role)}" oninput="upVol(${i},'role',this.value)"/><div class="g2" style="margin-top:4px"><input class="es" placeholder="${u.sd}" value="${x(v.sd)}" oninput="upVol(${i},'sd',this.value)"/><input class="es" placeholder="${u.ed}" value="${x(v.ed)}" oninput="upVol(${i},'ed',this.value)"/></div>`;c.appendChild(d);});}
+
+function ll(l){const u=t();return{Basic:u.basic,Intermediate:u.intermediate,Fluent:u.fluent,Native:u.native}[l]||l;}
+function render(){sync();const el=document.getElementById('cv-out');if(S.tpl==='ats')el.innerHTML=rATS();else if(S.tpl==='algerian')el.innerHTML=rALG();else el.innerHTML=rEUR();}
+
+function rATS(){const u=t();let h=`<div class="cv-ats"><div class="ah"><div class="an">${S.nm||'YOUR NAME'}</div><div class="at">${S.tt||'PROFESSIONAL TITLE'}</div><div class="acs">${S.em?`<span class="act">${mi(11)} ${S.em}</span>`:''} ${S.ph?`<span class="act">${pi(11)} ${S.ph}</span>`:''} ${S.ad?`<span class="act">${mapi(11)} ${S.ad}</span>`:''}</div></div>`;
+if(S.sm)h+=`<div class="as2"><div class="ash">${u.sm}<span class="aac"></span></div><div class="abdy">${nl(S.sm)}</div></div>`;
+if(S.exp.length){h+=`<div class="as2"><div class="ash">${u.exp}<span class="aac"></span></div>`;S.exp.forEach(e=>{h+=`<div class="aerow"><div class="ae1"><span class="aepos">${e.pos||'—'}</span><span class="aedts">${e.sd} — ${e.ed}</span></div><div class="aeco">${e.co}${e.loc?` · ${e.loc}`:''}</div><div class="aedsc">${nl(e.dsc)}</div></div>`;});h+=`</div>`;}
+if(S.edu.length||S.vl.length){h+=`<div class="as2"><div class="a2c"><div><div class="ash" style="font-size:.75rem">${u.edu}<span class="aac" style="width:24px"></span></div>`;S.edu.forEach(e=>{h+=`<div class="aedui"><div class="aedg">${e.deg||'—'}</div><div class="aesc">${e.sch}</div><div class="aedt">${e.sd} — ${e.ed}</div></div>`;});h+=`</div><div><div class="ash" style="font-size:.75rem">${u.vl}<span class="aac" style="width:24px"></span></div>`;S.vl.forEach(v=>{h+=`<div class="avr"><div class="avrr">${v.role||'—'}</div><div class="avro">${v.org}</div><div class="avrd">${v.sd} — ${v.ed}</div></div>`;});h+=`</div></div></div>`;}
+if(S.sk.length||S.lg.length){h+=`<div class="a2c" style="margin-top:14px"><div><div class="ash" style="font-size:.75rem">${u.sk}<span class="aac" style="width:24px"></span></div><div class="asts">${S.sk.map(s=>`<span class="ast">${s}</span>`).join('')}</div></div><div><div class="ash" style="font-size:.75rem">${u.lg}<span class="aac" style="width:24px"></span></div>${S.lg.map(l=>`<div class="alr"><span class="aln">${l.nm}</span><span class="all">${ll(l.lv)}</span></div>`).join('')}</div></div>`;}
+if(S.ct.length)h+=`<div class="as2" style="margin-top:12px"><div class="ash" style="font-size:.75rem">${u.ct}<span class="aac" style="width:24px"></span></div><div class="acl">${S.ct.map(c=>`<div class="aci">${awi(12)} ${c}</div>`).join('')}</div></div>`;
+return h+`</div>`;}
+
+function rALG(){const u=t();const ph=S.photo?`<img src="${S.photo}" class="algph"/>`:`<div class="algnph">${uic(44)}</div>`;
+let sb=`<div class="algb">${ph}<div class="algn">${S.nm||'FULL NAME'}</div><div class="algrl"></div><div class="algrole">${S.tt||'ROLE'}</div><div class="algsc"><div class="algssl">${u.nm}</div>${S.em?`<div class="algct">${mi(11)} ${S.em}</div>`:''} ${S.ph?`<div class="algct">${pi(11)} ${S.ph}</div>`:''} ${S.ad?`<div class="algct">${mapi(11)} ${S.ad}</div>`:''}</div>${S.lg.length?`<div class="algsc"><div class="algssl">${u.lg}</div>${S.lg.map(l=>`<div class="algll"><span class="alglln">${l.nm}</span><span class="algllv">${ll(l.lv)}</span></div>`).join('')}</div>`:''} ${S.sk.length?`<div class="algsc"><div class="algssl">${u.sk}</div><div style="padding:0 2px">${S.sk.map(s=>`<span class="algs">${s}</span>`).join('')}</div></div>`:''} ${S.ct.length?`<div class="algsc"><div class="algssl">${u.ct}</div>${S.ct.map(c=>`<div class="algci">${awi(10)} ${c}</div>`).join('')}</div>`:''}</div>`;
+let mn=`<div class="algm">${S.sm?`<div style="margin-bottom:24px"><div class="algmsh">${u.sm}</div><div class="algsum">"${S.sm}"</div></div>`:''} ${S.exp.length?`<div style="margin-bottom:24px"><div class="algmsh">${u.exp}</div>${S.exp.map(e=>`<div class="algei"><div class="algedot"></div><div class="algeh"><span class="algep">${e.pos||'—'}</span><span class="alged">${e.sd} — ${e.ed}</span></div><div class="algesub"><span class="algeco">${e.co}</span>${e.loc?`<span style="color:#ddd;margin:0 4px">·</span><span class="algeloc">${e.loc}</span>`:''}</div><div class="algedesc">${nl(e.dsc)}</div></div>`).join('')}</div>`:''} <div class="alg2"><div>${S.edu.length?`<div class="algmsh" style="font-size:.72rem">${u.edu}</div>${S.edu.map(e=>`<div class="algedi"><div class="algedeg">${e.deg||'—'}</div><div class="algesc2">${e.sch}</div><div class="algedt">${e.sd} — ${e.ed}</div></div>`).join('')}`:''}</div><div>${S.vl.length?`<div class="algmsh" style="font-size:.72rem">${u.vl}</div>${S.vl.map(v=>`<div class="algedi"><div class="algedeg">${v.role||'—'}</div><div class="algesc2">${v.org}</div><div class="algedt">${v.sd} — ${v.ed}</div></div>`).join('')}`:''}</div></div></div>`;
+return `<div class="cv-alg">${sb}${mn}</div>`;}
+
+function rEUR(){const u=t();const pts=(S.nm||'').split(' ');const fn=pts[0]||'NAME';const ln=pts.slice(1).join(' ')||'';let h=`<div class="cv-eur"><div class="eurhd"><div style="flex:1"><div class="eurn">${fn}${ln?`<br><em>${ln}</em>`:''}</div><div class="eurjt">${S.tt||'PROFESSIONAL TITLE'}</div><div class="eurcs">${S.em?`<span class="eurcp">${mi(10)} ${S.em}</span>`:''} ${S.ph?`<span class="eurcp">${pi(10)} ${S.ph}</span>`:''} ${S.ad?`<span class="eurcp">${mapi(10)} ${S.ad}</span>`:''}</div></div>${S.photo?`<div class="eurph"><img src="${S.photo}"/></div>`:''}</div><div class="eurbd">`;
+h+=`<div class="eurlw"><div class="eursl">${u.sm}</div><div class="euracc"></div></div><div class="eursum">"${S.sm||''}"</div>`;
+if(S.exp.length){h+=`<div class="eurlw"><div class="eursl">${u.exp}</div><div class="euracc"></div></div><div>`;S.exp.forEach(e=>{h+=`<div class="eurei"><div class="eureh"><span class="eurep">${e.pos||'—'}</span><span class="eured">${e.sd} — ${e.ed}</span></div><div class="eureco">${e.co}<span>•</span>${e.loc}</div><div class="euredsc">${nl(e.dsc)}</div></div>`;});h+=`</div>`;}
+if(S.edu.length)h+=`<div class="eurlw"><div class="eursl">${u.edu}</div><div class="euracc"></div></div><div class="eureg">${S.edu.map(e=>`<div class="eurec"><div class="euredeg">${e.deg||'—'}</div><div class="euresc">${e.sch}</div><div class="euredt">${e.sd} — ${e.ed}</div></div>`).join('')}</div>`;
+if(S.vl.length){h+=`<div class="eurlw"><div class="eursl">${u.vl}</div><div class="euracc"></div></div><div>`;S.vl.forEach(v=>{h+=`<div class="eurvitem"><div class="eurvr">${v.role||'—'}</div><div class="eurvo">${v.org}</div><div class="eurvbar"><div class="eurvfill"></div></div><div class="eurvd">${v.sd} — ${v.ed}</div></div>`;});h+=`</div>`;}
+if(S.lg.length)h+=`<div class="eurlw"><div class="eursl">${u.lg}</div><div class="euracc"></div></div><div class="eurlcds">${S.lg.map(l=>`<div class="eurlcd"><div class="eurlcn">${l.nm}</div><div class="eurlcl">${ll(l.lv)}</div></div>`).join('')}</div>`;
+if(S.sk.length)h+=`<div class="eurlw"><div class="eursl">${u.sk}</div><div class="euracc"></div></div><div class="eursts">${S.sk.map(s=>`<span class="eurst">${s}</span>`).join('')}</div>`;
+if(S.ct.length)h+=`<div class="eurlw"><div class="eursl">${u.ct}</div><div class="euracc"></div></div><div class="eurcl">${S.ct.map(c=>`<div class="eurci"><div class="eurcic">${awi(13)}</div><span class="eurct">${c}</span></div>`).join('')}</div>`;
+return h+`</div></div>`;}
+
+function exportPDF(){const cv=document.getElementById('cv-out').innerHTML;const styles=Array.from(document.querySelectorAll('style')).map(s=>s.outerHTML).join('');const fonts=document.querySelector('link[href*="fonts"]')?.outerHTML||'';const win=window.open('','_blank');win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">${fonts}${styles}<style>@media print{body{margin:0}}</style></head><body style="margin:0;background:#fff">${cv}</body></html>`);win.document.close();win.onload=()=>win.print();}
+function exportDocx(){const u=t();let txt=`${S.nm}\n${S.tt}\n${S.em}  |  ${S.ph}  |  ${S.ad}\n${'─'.repeat(60)}\n\n`;if(S.sm)txt+=`${u.sm}\n${S.sm}\n\n`;if(S.exp.length){txt+=`${u.exp}\n${'─'.repeat(40)}\n`;S.exp.forEach(e=>{txt+=`${e.pos} — ${e.co} (${e.sd} – ${e.ed})\n${e.dsc}\n\n`;});}if(S.edu.length){txt+=`${u.edu}\n${'─'.repeat(40)}\n`;S.edu.forEach(e=>{txt+=`${e.deg} — ${e.sch} (${e.sd} – ${e.ed})\n\n`;});}if(S.sk.length)txt+=`${u.sk}\n${S.sk.join(', ')}\n\n`;const blob=new Blob([txt],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`CV_${(S.nm||'doc').replace(/\s/g,'_')}.txt`;a.click();}
+
+function x(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function nl(s){return x(s).replace(/\n/g,'<br/>');}
+function mi(z){return`<svg width="${z}" height="${z}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`;}
+function pi(z){return`<svg width="${z}" height="${z}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13 19.79 19.79 0 0 1 1.61 4.38 2 2 0 0 1 3.58 2h3a2 2 0 0 1 2 1.72c.13 1 .37 1.97.72 2.9a2 2 0 0 1-.45 2.11L7.91 9.91A16 16 0 0 0 14 16l.88-.88a2 2 0 0 1 2.11-.45c.93.35 1.9.59 2.9.72A2 2 0 0 1 22 16.92z"/></svg>`;}
+function mapi(z){return`<svg width="${z}" height="${z}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`;}
+function awi(z){return`<svg width="${z}" height="${z}" viewBox="0 0 24 24" fill="none" stroke="#5865f2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>`;}
+function uic(z){return`<svg width="${z}" height="${z}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;}
+function tr(){return`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>`;}
+
+refreshPreds();render();
+</script>
+</body>
+</html>
